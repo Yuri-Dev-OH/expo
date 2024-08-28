@@ -1,0 +1,128 @@
+import React, { useState } from 'react';
+import { Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+
+export default function App() {
+  const [n1, setN1] = useState('0');  // Note que usei string porque TextInput retorna texto
+  const [n2, setN2] = useState('0');
+  const [r, setR] = useState(0);
+
+  const soma = () => {
+    const a = parseFloat(n1);
+    const b = parseFloat(n2);
+    const s = a + b;
+    setR(s);
+  };
+
+  const subtracao = () => {
+    const a = parseFloat(n1);
+    const b = parseFloat(n2);
+    const su = a - b;
+    setR(su);
+  };
+
+  const multiplicacao = () => {
+    const a = parseFloat(n1);
+    const b = parseFloat(n2);
+    const m = a * b;
+    setR(m);
+  };
+
+  const divisao = () => {
+    const a = parseFloat(n1);
+    const b = parseFloat(n2);
+    const d = a / b;
+    setR(d);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text>Calculadora Básica</Text>
+      <TextInput
+        style={styles.input}
+        value={n1}
+        keyboardType="numeric"
+        placeholderTextColor="gray"
+        placeholder="Entre com número"
+        onChangeText={setN1}
+      />
+
+      <TextInput
+        style={styles.input}
+        value={n2}
+        keyboardType="numeric"
+        placeholderTextColor="gray"
+        placeholder="Entre com número"
+        onChangeText={setN2}
+      />
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          onPress={soma}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}> + </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={subtracao}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}> - </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={multiplicacao}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}> * </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={divisao}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}> / </Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text>Resposta: {r}</Text>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#ecf0f1',
+    alignItems: 'center',
+    padding: 8,
+  },
+  input: {
+    margin: 10,
+    borderRadius: 2,
+    borderWidth: 1,
+    width: 200,
+    padding: 8,
+  },
+  buttonContainer: {
+    flexDirection: 'row',  // Organiza os botões horizontalmente
+    margin: 10,
+  },
+  button: {
+    borderWidth: 2,
+    width: 50,  // Aumentei um pouco para melhor visualização
+    margin: 5,  // Ajustado para espaçar os botões
+    borderRadius: 5,
+    backgroundColor: 'gray',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'white',
+  },
+});
+
