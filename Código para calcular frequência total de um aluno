@@ -1,0 +1,103 @@
+import { useState } from 'react';
+import {
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+
+export default function App() {
+  // declarar os states (variáveis principais)
+  const [pg, setPg] = useState();
+  const [pe, setPe] = useState();
+  const [pf, setPf] = useState(0);
+  const [resultado, setResultado]=useState("")
+  // função para calcular o IMC
+  calcularPreco=()=>{
+    a = parseFloat(pg)
+    p = parseFloat(pe)
+    r = p/a * 100
+
+      if (r < 75) {
+      setResultado('Frequência abaixo do esperado.');
+    } else if (r >= 75 && r < 100) {
+      setResultado('Frequência normal.');
+    } else if (r === 100) {
+      setResultado('Parabéns.');
+    } 
+   
+
+  
+setPf(r);
+  }
+
+
+  // elaborar o layout
+  return (
+    <SafeAreaView style={styles.container}>
+    
+      <Text style={{ margin: 10, fontWeight: 'bold', fontSize: 14 }}>
+        Calcular faltas
+      </Text>
+
+      <Text>Matéria</Text>
+      <TextInput
+        style={{ borderWidth: 1, width: 130, borderRadius: 3 }}
+        placeholder="Entre com a matéria"
+        placeholderTextColor="gray"
+        >
+        </TextInput>
+
+      <Text>Aulas dadas</Text>
+      <TextInput
+        style={{ borderWidth: 1, width: 165, borderRadius: 3 }}
+        placeholder="Entre com o total de aulas"
+        placeholderTextColor="gray"
+        value={pg}
+        onChangeText={setPg}
+        keyboardType="numeric"></TextInput>
+      <Text>Faltas</Text>
+      <TextInput
+        style={{ borderWidth: 1, width: 225, borderRadius: 3 }}
+        placeholder="Entre com o total de faltas do aluno"
+         placeholderTextColor="gray"
+        value={pe}
+        onChangeText={setPe}
+        keyboardType="numeric"></TextInput>
+
+      <TouchableOpacity
+        onPress={()=>calcularPreco()}
+        style={{
+          margin: 30,
+          borderWidth: 1,
+          borderRadius: 3,
+          width: 150,
+          backgroundColor: '#C0C0C0',
+        }}>
+        <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Calcular as faltas do aluno
+        </Text>
+      </TouchableOpacity>
+      <Text>Resultado:{pf.toFixed(2)}%</Text>
+      <Text>Conclusão:{resultado}</Text>
+       <Text>
+       Se menor 75% enviar mensagem: "Frequência abaixo do esperado"
+       Se frequência maior ou igual a 75% e menor que 100%, mensagem "Frequência normal"
+       Se frequência igual a 100%, mensagem "Parabéns".
+       </Text>
+    </SafeAreaView>
+  );
+  
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#d3b4d1',
+    padding: 8,
+  },
+  
+});
