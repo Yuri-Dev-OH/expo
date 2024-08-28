@@ -1,0 +1,84 @@
+import { useState } from 'react';
+import {
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+
+export default function App() {
+  // declarar os states (variáveis principais)
+  const [pg, setPg] = useState();
+  const [pe, setPe] = useState();
+  const [pf, setPf] = useState(0);
+  const [resultado, setResultado]=useState("?")
+  // função para calcular o IMC
+  calcularPreco=()=>{
+    a = parseFloat(pg)
+    p = parseFloat(pe)
+    r = p/a
+    if (r <= 0.7) setResultado('Etanol vale a pena, bichão.');
+    
+    else setResultado('Esqueça tudo, vá na gasolina.');
+   
+
+  
+setPf(r);
+  }
+
+
+  // elaborar o layout
+  return (
+    <SafeAreaView style={styles.container}>
+      <Text style={{ margin: 10, fontWeight: 'bold', fontSize: 14 }}>
+        Calcular combustível
+      </Text>
+      <Text>Gasolina</Text>
+      <TextInput
+        style={{ borderWidth: 1, width: 190, borderRadius: 3 }}
+        placeholder="Entre com o preço da gasolina"
+        placeholderTextColor="gray"
+        value={pg}
+        onChangeText={setPg}
+        keyboardType="numeric"></TextInput>
+      <Text>Etanol</Text>
+      <TextInput
+        style={{ borderWidth: 1, width: 170, borderRadius: 3 }}
+        placeholder="Entre com preço do etanol"
+         placeholderTextColor="gray"
+        value={pe}
+        onChangeText={setPe}
+        keyboardType="numeric"></TextInput>
+
+      <TouchableOpacity
+        onPress={()=>calcularPreco()}
+        style={{
+          margin: 30,
+          borderWidth: 1,
+          borderRadius: 3,
+          width: 150,
+          backgroundColor: '#C0C0C0',
+        }}>
+        <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
+          Calcular se vale a pena o Etanol
+        </Text>
+      </TouchableOpacity>
+      <Text>Resultado:{pf.toFixed(2)}</Text>
+      <Text>Conclusão:{resultado}</Text>
+       <Text> Se o resultado for igual ou maior que 0,7, gasolina é melhor, senão, etanol.</Text>
+    </SafeAreaView>
+  );
+  
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ecf0f1',
+    padding: 8,
+  },
+  
+});
