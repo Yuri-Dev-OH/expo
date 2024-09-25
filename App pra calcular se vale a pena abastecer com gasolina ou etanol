@@ -1,75 +1,86 @@
-import { useState } from 'react';
-import {
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState } from 'react';
+import { Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View, Image } from 'react-native';
+
+// Substitua 'your-image.png' pelo nome da sua imagem
+const imagePath = require('./assets/file.png');
 
 export default function App() {
-  // declarar os states (variáveis principais)
-  const [pg, setPg] = useState();
-  const [pe, setPe] = useState();
+  const [pg, setPg] = useState('');
+  const [pe, setPe] = useState('');
   const [pf, setPf] = useState(0);
-  const [resultado, setResultado]=useState("?")
-  // função para calcular o IMC
-  calcularPreco=()=>{
-    a = parseFloat(pg)
-    p = parseFloat(pe)
-    r = p/a
-    if (r <= 0.7) setResultado('Etanol vale a pena, bichão.');
-    
-    else setResultado('Esqueça tudo, vá na gasolina.');
-   
+  const [resultado, setResultado] = useState("?");
 
-  
-setPf(r);
+  const calcularPreco = () => {
+    const a = parseFloat(pg);
+    const p = parseFloat(pe);
+    
+    if (isNaN(a) || isNaN(p) || a <= 0 || p <= 0) {
+      setResultado('Por favor, insira preços válidos.');
+      setPf(0);
+      return;
+    }
+    
+    const r = p / a;
+    setPf(r);
+
+    if (r <= 0.7) {
+      setResultado('Etanol vale mais a pena.');
+    } else {
+      setResultado('Gasolina vale mais a pena.');
+    }
   }
 
-
-  // elaborar o layout
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={{ margin: 10, fontWeight: 'bold', fontSize: 14 }}>
-        Calcular combustível
-      </Text>
-      <Text>Gasolina</Text>
-      <TextInput
-        style={{ borderWidth: 1, width: 190, borderRadius: 3 }}
-        placeholder="Entre com o preço da gasolina"
-        placeholderTextColor="gray"
-        value={pg}
-        onChangeText={setPg}
-        keyboardType="numeric"></TextInput>
-      <Text>Etanol</Text>
-      <TextInput
-        style={{ borderWidth: 1, width: 170, borderRadius: 3 }}
-        placeholder="Entre com preço do etanol"
-         placeholderTextColor="gray"
-        value={pe}
-        onChangeText={setPe}
-        keyboardType="numeric"></TextInput>
+      <View style={styles.imageContainer}>
+        {/* Imagem local do projeto */}
+        <Image 
+          source={imagePath} 
+          style={styles.image} 
+          resizeMode="contain"
+        />
+      </View>
+      
+      <Text style={styles.appTitle}>Calculadora de Combustíveis</Text> {/* Título do app */}
 
-      <TouchableOpacity
-        onPress={()=>calcularPreco()}
-        style={{
-          margin: 30,
-          borderWidth: 1,
-          borderRadius: 3,
-          width: 150,
-          backgroundColor: '#C0C0C0',
-        }}>
-        <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
-          Calcular se vale a pena o Etanol
-        </Text>
+      
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Preço da Gasolina:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Entre com o preço da gasolina"
+          placeholderTextColor="#4b8a08"
+          value={pg}
+          onChangeText={setPg}
+          keyboardType="numeric"
+        />
+      </View>
+      
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Preço do Etanol:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Entre com o preço do etanol"
+          placeholderTextColor="#4b8a08"
+          value={pe}
+          onChangeText={setPe}
+          keyboardType="numeric"
+        />
+      </View>
+
+      <TouchableOpacity onPress={calcularPreco} style={styles.button}>
+        <Text style={styles.buttonText}>Obter resultado</Text>
       </TouchableOpacity>
-      <Text>Resultado:{pf.toFixed(2)}</Text>
-      <Text>Conclusão:{resultado}</Text>
-       <Text> Se o resultado for igual ou maior que 0,7, gasolina é melhor, senão, etanol.</Text>
+      
+      <Text style={styles.result}>Resultado: {pf.toFixed(2)}</Text>
+      <Text style={styles.conclusion}>Conclusão: {resultado}</Text>
+
+      {/* Bloco ao redor da informação */}
+      <View style={styles.infoContainer}>
+        <Text style={styles.info}>Se o resultado for igual ou maior que 0,7, gasolina é melhor, senão, etanol.</Text>
+      </View>
     </SafeAreaView>
   );
-  
 }
 
 const styles = StyleSheet.create({
@@ -77,8 +88,84 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 8,
+    backgroundColor: '#f4f4f4', // cor de fundo suave
+    padding: 16,
   },
-  
+  imageContainer: {
+    marginBottom: 20, // espaço para a imagem
+    alignItems: 'center',
+  },
+  image: {
+    width: 300, // ajuste o tamanho conforme necessário
+    height: 150, // ajuste o tamanho conforme necessário
+  },
+  appTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#2e8b57', // verde escuro
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#2e8b57', // verde escuro
+  },
+  inputContainer: {
+    marginBottom: 15,
+    width: '80%',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 5,
+    color: '#2e8b57', // verde escuro
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#2e8b57', // verde escuro
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
+    backgroundColor: '#ffffff',
+  },
+  button: {
+    backgroundColor: '#f4c542', // amarelo
+    padding: 15,
+    borderRadius: 5,
+    width: '80%',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  buttonText: {
+    color: '#2e8b57', // verde escuro
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  result: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: '#2e8b57', // verde escuro
+  },
+  conclusion: {
+    fontSize: 16,
+    marginVertical: 5,
+    fontWeight: '400',
+    color: '#2e8b57', // verde escuro
+  },
+  infoContainer: {
+    borderWidth: 1,
+    borderColor: '#4b8a08', // verde mais claro
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 15,
+    width: '80%',
+    backgroundColor: '#ffffff', // fundo branco
+  },
+  info: {
+    fontSize: 14,
+    color: '#4b8a08', // verde mais claro
+    textAlign: 'center',
+  },
 });
