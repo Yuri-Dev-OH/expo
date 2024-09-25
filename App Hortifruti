@@ -1,0 +1,188 @@
+import { useState } from 'react';
+import {
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
+
+// Importar a imagem local
+import logo from './assets/groceries.png'; // Certifique-se de que a imagem está na pasta correta
+
+export default function App() {
+  const [p1, setP1] = useState('');
+  const [p2, setP2] = useState('');
+  const [p3, setP3] = useState('');
+  const [p4, setP4] = useState('');
+
+  const [q1, setQ1] = useState('');
+  const [q2, setQ2] = useState('');
+  const [q3, setQ3] = useState('');
+  const [q4, setQ4] = useState('');
+
+  const [d0, setD0] = useState('');
+  const [d1, setD1] = useState('');
+  const [d2, setD2] = useState('');
+  const [d3, setD3] = useState('');
+  const [d4, setD4] = useState('');
+
+  const [resultado, setResultado] = useState(0);
+  const [resultado1, setResultado1] = useState(0);
+  const [resultado2, setResultado2] = useState(0);
+
+  const calcularPreco = () => {
+    const preco1 = parseFloat(p1);
+    const preco2 = parseFloat(p2);
+    const preco3 = parseFloat(p3);
+    const preco4 = parseFloat(p4);
+
+    const quantidade1 = parseFloat(q1);
+    const quantidade2 = parseFloat(q2);
+    const quantidade3 = parseFloat(q3);
+    const quantidade4 = parseFloat(q4);
+
+    const descontoGeral = parseFloat(d0) / 100;
+
+    const desconto1 = parseFloat(d1) / 100;
+    const desconto2 = parseFloat(d2) / 100;
+    const desconto3 = parseFloat(d3) / 100;
+    const desconto4 = parseFloat(d4) / 100;
+
+    const precoBananas = preco1 * quantidade1 * (1 - desconto1);
+    const precoMacas = preco2 * quantidade2 * (1 - desconto2);
+    const precoUvas = preco3 * quantidade3 * (1 - desconto3);
+    const precoGoiabas = preco4 * quantidade4 * (1 - desconto4);
+
+    const totalSemDesconto = (preco1 * quantidade1) + (preco2 * quantidade2) + (preco3 * quantidade3) + (preco4 * quantidade4);
+    const totalComDescontoIndividual = precoBananas + precoMacas + precoUvas + precoGoiabas;
+    const totalComDescontoGeral = totalComDescontoIndividual * (1 - descontoGeral);
+    const economiaTotal = totalSemDesconto - totalComDescontoGeral;
+
+    setResultado(totalSemDesconto);
+    setResultado1(totalComDescontoGeral);
+    setResultado2(economiaTotal);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Image source={logo} style={styles.image} />
+
+        <Text style={styles.header}>Comanda de Hortifruti</Text>
+
+        <InputField label="Banana" price={p1} setPrice={setP1} quantity={q1} setQuantity={setQ1} discount={d1} setDiscount={setD1} />
+        <InputField label="Maçã" price={p2} setPrice={setP2} quantity={q2} setQuantity={setQ2} discount={d2} setDiscount={setD2} />
+        <InputField label="Uva" price={p3} setPrice={setP3} quantity={q3} setQuantity={setQ3} discount={d3} setDiscount={setD3} />
+        <InputField label="Goiaba" price={p4} setPrice={setP4} quantity={q4} setQuantity={setQ4} discount={d4} setDiscount={setD4} />
+
+        <Text style={styles.label}>Desconto geral (%)</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Desconto geral"
+          placeholderTextColor="gray"
+          value={d0}
+          onChangeText={setD0}
+          keyboardType="numeric"
+        />
+
+        <TouchableOpacity onPress={calcularPreco} style={styles.button}>
+          <Text style={styles.buttonText}>Calcular a compra</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.result}>Total sem desconto: R$ {resultado.toFixed(2)}</Text>
+        <Text style={styles.result}>Total com desconto: R$ {resultado1.toFixed(2)}</Text>
+        <Text style={styles.result}>Total economizado: R$ {resultado2.toFixed(2)}</Text>
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
+
+const InputField = ({ label, price, setPrice, quantity, setQuantity, discount, setDiscount }) => (
+  <>
+    <Text style={styles.label}>{label}</Text>
+    <TextInput
+      style={styles.input}
+      placeholder={`Valor da ${label.toLowerCase()}`}
+      placeholderTextColor="gray"
+      value={price}
+      onChangeText={setPrice}
+      keyboardType="numeric"
+    />
+    <TextInput
+      style={styles.input}
+      placeholder={`Quantidade de ${label.toLowerCase()}s`}
+      placeholderTextColor="gray"
+      value={quantity}
+      onChangeText={setQuantity}
+      keyboardType="numeric"
+    />
+    <TextInput
+      style={styles.input}
+      placeholder={`Desconto para ${label.toLowerCase()}s (%)`}
+      placeholderTextColor="gray"
+      value={discount}
+      onChangeText={setDiscount}
+      keyboardType="numeric"
+    />
+  </>
+);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#e8f5e9',
+    padding: 16,
+  },
+  scrollView: {
+    alignItems: 'center',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#388e3c',
+    marginBottom: 20,
+  },
+  label: {
+    fontWeight: 'bold',
+    color: '#388e3c',
+    marginBottom: 5,
+  },
+  input: {
+    borderWidth: 1,
+    width: '90%',
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 8,
+    borderColor: '#388e3c',
+    backgroundColor: '#ffffff',
+  },
+  button: {
+    margin: 20,
+    borderWidth: 1,
+    borderRadius: 5,
+    width: '90%',
+    backgroundColor: '#81c784',
+    padding: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  result: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#388e3c',
+    marginTop: 10,
+  },
+  image: {
+    width: 150,
+    height: 150,
+    marginBottom: 20,
+    borderRadius: 10,
+  },
+});
