@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View, Image, ScrollView } from 'react-native';
+
+const logoPath = require('./assets/file.png');
 
 export default function App() {
   const [n1, setN1] = useState('');  // Peso
@@ -11,10 +13,9 @@ export default function App() {
     const peso = parseFloat(n1);
     const altura = parseFloat(n2);
     if (!isNaN(peso) && !isNaN(altura) && altura > 0) {
-      const resultado = peso / (altura^2);
+      const resultado = peso / (altura ** 2);
       setR(resultado.toFixed(2));
 
-      // Determine a categoria do IMC
       let categoriaIMC = '';
       if (resultado < 18.5) {
         categoriaIMC = 'Abaixo do peso';
@@ -34,46 +35,53 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Calculadora IMC</Text>
-      <TextInput
-        style={styles.input}
-        value={n1}
-        keyboardType="numeric"
-        placeholderTextColor="gray"
-        placeholder="Peso (kg)"
-        onChangeText={setN1}
-      />
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <View style={styles.logoContainer}>
+          <Image 
+            source={logoPath} 
+            style={styles.logo} 
+            resizeMode="contain" 
+          />
+        </View>
+        <Text style={styles.appTitle}>Calculadora IMC</Text>
+        <Text style={styles.subtitle}>Descubra seu índice de massa corporal!</Text>
 
-      <TextInput
-        style={styles.input}
-        value={n2}
-        keyboardType="numeric"
-        placeholderTextColor="gray"
-        placeholder="Altura (m)"
-        onChangeText={setN2}
-      />
+        <TextInput
+          style={styles.input}
+          value={n1}
+          keyboardType="numeric"
+          placeholderTextColor="#6b7c93"
+          placeholder="Peso (kg)"
+          onChangeText={setN1}
+        />
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={calcularIMC}
-          style={styles.button}
-        >
+        <TextInput
+          style={styles.input}
+          value={n2}
+          keyboardType="numeric"
+          placeholderTextColor="#6b7c93"
+          placeholder="Altura (m)"
+          onChangeText={setN2}
+        />
+
+        <TouchableOpacity onPress={calcularIMC} style={styles.button}>
           <Text style={styles.buttonText}>Calcular IMC</Text>
         </TouchableOpacity>
-      </View>
 
-      <Text>Resposta: {r}</Text>
-      {categoria ? (
-        <Text>Categoria: {categoria}</Text>
-      ) : null}
+        <Text style={styles.result}>Resposta: {r}</Text>
+        {categoria ? (
+          <Text style={styles.category}>Categoria: {categoria}</Text>
+        ) : null}
 
-      <View style={styles.tableContainer}>
-        <Text style={styles.tableHeader}>Tabela de IMC:</Text>
-        <Text style={styles.tableRow}>Abaixo de 18.5: Abaixo do peso</Text>
-        <Text style={styles.tableRow}>18.5 - 24.9: Peso normal</Text>
-        <Text style={styles.tableRow}>25 - 29.9: Sobrepeso</Text>
-        <Text style={styles.tableRow}>30 ou mais: Obesidade</Text>
-      </View>
+        <View style={styles.tableContainer}>
+          <Text style={styles.tableHeader}>Tabela de IMC:</Text>
+          <Text style={styles.tableRow}>Abaixo de 18.5: Abaixo do peso</Text>
+          <Text style={styles.tableRow}>18.5 - 24.9: Peso normal</Text>
+          <Text style={styles.tableRow}>25 - 29.9: Sobrepeso</Text>
+          <Text style={styles.tableRow}>30 ou mais: Obesidade</Text>
+        </View>
+        <Text style={styles.footer}>Lembre-se: o importante é se sentir bem!</Text>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -81,50 +89,86 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#eaeef1',
+  },
+  scrollView: {
     alignItems: 'center',
-    padding: 8,
+    padding: 16,
+  },
+  logoContainer: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  logo: {
+    width: 300,
+    height: 300,
+  },
+  appTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#2c3e50',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#7f8c8d',
+    marginBottom: 20,
   },
   input: {
     margin: 10,
-    borderRadius: 2,
+    borderRadius: 5,
     borderWidth: 1,
-    width: 200,
-    padding: 8,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    margin: 10,
+    borderColor: '#2980b9',
+    width: 250,
+    padding: 10,
+    backgroundColor: '#ffffff',
   },
   button: {
-    borderWidth: 2,
-    width: 150,
-    margin: 5,
+    backgroundColor: '#27ae60',
+    padding: 15,
     borderRadius: 5,
-    backgroundColor: 'gray',
+    width: '80%',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
+    marginVertical: 20,
   },
   buttonText: {
-    textAlign: 'center',
+    color: '#ffffff',
     fontWeight: 'bold',
-    color: 'white',
+    fontSize: 16,
+  },
+  result: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
+    color: '#34495e',
+  },
+  category: {
+    fontSize: 16,
+    marginVertical: 5,
+    fontWeight: '500',
+    color: '#8e44ad',
   },
   tableContainer: {
     marginTop: 20,
-    padding: 10,
+    padding: 15,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: '#bdc3c7',
     borderRadius: 5,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#ffffff',
   },
   tableHeader: {
     fontWeight: 'bold',
     marginBottom: 10,
+    color: '#2980b9',
   },
   tableRow: {
     marginBottom: 5,
+    color: '#7f8c8d',
+  },
+  footer: {
+    marginTop: 20,
+    fontSize: 14,
+    color: '#34495e',
+    fontStyle: 'italic',
   },
 });
